@@ -1,4 +1,6 @@
 # Task Management System
+This documentation provides detailed information about the classes, methods, and error handling in the Task Management System. It includes practical examples and explains how the system handles various error scenarios.
+
 
 This project implements a simple task management system in Python with three main modules:
 1. `task.py`: Defines task-related classes.
@@ -57,16 +59,16 @@ Detailed descriptions of the classes and methods are in the code comments.
         is_valid, error = task.validate()
 
 ## Error Handling
-1.Validation Errors (400 Bad Request)
-    Missing required fields
-    Invalid data formats
-    Invalid status values
-2.Resource Not Found (404 Not Found)
-    Task ID doesn't exist
-3.Database Errors (500 Internal Server Error)
-    Connection issues
-    Query execution failures
-    This documentation provides detailed information about the classes, methods, and error handling in the Task Management System. It includes practical examples and explains how the system handles various error scenarios.
+1. Validation Errors (400 Bad Request)
+        - Missing required fields
+        -Invalid data formats
+        -Invalid status values
+2. Resource Not Found (404 Not Found)
+        -Task ID doesn't exist
+3. Database Errors (500 Internal Server Error)
+           -Connection issues
+            -Query execution failures
+         
 
 # Examples of implementation
 - Prevents adding descriptions longer than 15 characters.
