@@ -48,15 +48,24 @@ class Task:
             raise ValueError("Description exceeds 15 characters.")
         self._description = description
 
+
+
+    ''' 
+    Returns id : int
+    Params self
+    '''
     def save_to_db(self):
-        """Save the current task to the database."""
-        conn=sqlite3.connect("tasks.db")
-        cursor = conn.cursor()
-        cursor.execute('INSERT INTO tasks (title, due_date, description, status, flag) VALUES (?, ?, ?, ?, ?)', 
-                       (self.title, self.due_date, self._description, self.status, self.flag))
-        conn.commit()
-        cursor.close()
-        conn.close()
+    
+        with sqlite3.connect("tasks.db") as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                'INSERT INTO tasks (title, due_date, description, status, flag) VALUES (?, ?, ?, ?, ?)',
+                (self.title, self.due_date, self._description, self.status, self.flag)
+            )
+            task_id = cursor.lastrowid  # Get the ID of the inserted task
+        return task_id
+        
+
 
 #Load all tasks from database
     

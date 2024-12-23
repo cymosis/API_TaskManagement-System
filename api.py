@@ -2,6 +2,9 @@ from flask import Flask, request, jsonify
 from task import Task, PersonalTask, WorkTask
 from task_manager import TaskManager
 from datetime import datetime, date
+from Controllers.TaskController import TaskController as task_controller
+
+
 
 app = Flask(__name__)
 task_manager = TaskManager()
@@ -9,42 +12,7 @@ task_manager = TaskManager()
 @app.route('/tasks', methods=['POST'])
 def create_task():
     data = request.get_json()
-    
-    try:
-        # Validate required fields
-        required_fields = ['type', 'title', 'due_date']
-        for field in required_fields:
-            if field not in data:
-                return jsonify({'error': f'Missing required field: {field}'}), 400
-
-        # Create appropriate task type
-        task_type = data['type'].lower()
-        if task_type == 'personal':
-            task = PersonalTask(
-                title=data['title'],
-                due_date=data['due_date'],
-                description=data.get('description'),
-                priority=data.get('priority', 'low')
-            )
-        elif task_type == 'work':
-            task = WorkTask(
-                title=data['title'],
-                due_date=data['due_date'],
-                description=data.get('description')
-            )
-            # Add team members if provided
-            if 'team_members' in data:
-                for member in data['team_members']:
-                    task.add_team_member(member)
-        else:
-            return jsonify({'error': 'Invalid task type. Must be "personal" or "work"'}), 400
-
-        # Save task to database
-        task.save_to_db()
-        return jsonify({'message': 'Task created successfully', 'task_id': task.get_task_id()}), 201
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+    return task_controller.create_task(data)
 
 @app.route('/tasks', methods=['GET'])
 def get_tasks():
