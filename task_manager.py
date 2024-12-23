@@ -152,10 +152,11 @@ class TaskManager:
     def save_task(self, filename="all_task_list.csv"):
         """Save tasks to CSV file"""
         try:
-            tasks = self.list_tasks()
-            df = pd.DataFrame(tasks)
+            df = pd.DataFrame(self.db_file)
             df.to_csv(filename, index=False)
             return True
         except Exception as e:
             print(f"Error saving tasks: {e}")
             return False
+
+TaskManager.save_task('all_task_list.csv')
