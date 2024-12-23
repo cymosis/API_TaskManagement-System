@@ -4,8 +4,6 @@ from task_manager import TaskManager
 from datetime import datetime, date
 from Controllers.TaskController import TaskController as task_controller
 
-
-
 app = Flask(__name__)
 task_manager = TaskManager()
 
@@ -16,75 +14,34 @@ def create_task():
 
 @app.route('/tasks', methods=['GET'])
 def get_tasks():
-    try:
-        task_type = request.args.get('type')
-        tasks = task_manager.list_tasks()
-        
-        if task_type:
-            # Filter tasks by type if specified
-            tasks = [task for task in tasks if task[5] == task_type]
-            
-        return jsonify({'tasks': tasks}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    get_tasks=task_controller.get_tasks()
+    return get_tasks
 
 @app.route('/tasks/<int:task_id>', methods=['GET'])
 def get_task(task_id):
-    try:
-        task = Task.load_from_db(task_id)
-        if task:
-            return jsonify({'task': str(task)}), 200
-        return jsonify({'error': 'Task not found'}), 404
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    indiv_task=task_controller.specific_task(task_id)
+    return indiv_task
+
 
 @app.route('/tasks/<int:task_id>', methods=['PUT'])
 def update_task(task_id):
-    try:
-        data = request.get_json()
-        if not data:
-            return jsonify({'error': 'No update data provided'}), 400
-
-        # Get existing task
-        task = Task.load_from_db(task_id)
-        if not task:
-            return jsonify({'error': 'Task not found'}), 404
-
-        # Update description if provided
-        if 'description' in data:
-            Task.update_in_db(data['description'], task.status, task_id)
-            return jsonify({'message': 'Task updated successfully'}), 200
-
-        return jsonify({'error': 'No valid update fields provided'}), 400
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    update=task_controller.update_task(task_id)
+    return update
 
 @app.route('/tasks/<int:task_id>', methods=['DELETE'])
 def delete_task(task_id):
-    try:
-        result = Task.delete_from_db(task_id)
-        if 'not found' in result.lower():
-            return jsonify({'error': result}), 404
-        return jsonify({'message': result}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    deleted_atask=task_controller.delete_task(task_id)
+    return delete_task
 
 @app.route('/tasks/pending', methods=['GET'])
 def get_pending_tasks():
-    try:
-        pending_tasks = task_manager.get_pending_tasks()
-        return jsonify({'pending_tasks': pending_tasks}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    pending=task_controller.pending_tasks()
+    return pending
 
 @app.route('/tasks/overdue', methods=['GET'])
 def get_overdue_tasks():
-    try:
-        overdue_tasks = task_manager.get_overdue_tasks()
-        return jsonify({'overdue_tasks': overdue_tasks}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    overdue=task_controller.overdue_tasks()
+    return overdue
 
 if __name__ == '__main__':
     app.run(debug=True,port=5000)
