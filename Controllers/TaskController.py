@@ -40,9 +40,9 @@ class TaskController:
                 return jsonify({'error': 'Invalid task type. Must be "personal" or "work"'}), 400
 
             # Save task to database
-            task_id=task.save_to_db()
-            return jsonify({'message': 'Task created successfully','task id':task_id}), 201
-
+            #task_id=task.save_to_db()
+            #return jsonify({'message': 'Task created successfully','task id':task_id}), 201
+            return True
         except Exception as e:
             return jsonify({'error': str(e)}), 400
 
